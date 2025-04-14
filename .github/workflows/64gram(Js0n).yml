@@ -10,6 +10,15 @@ on:
         - Linux
         - macOS
         - Windows
+      YOUR_API_ID:
+        required: true
+        default: '2040'
+        type: string
+      YOUR_API_HASH:
+        required: true
+        default: 'b18441a1ff607e10a989891a5462e627'
+        type: string
+        
 
 jobs:
   docker:
@@ -51,6 +60,11 @@ jobs:
     if: ${{ inputs.chosen-os == Linux }}
     runs-on: ubuntu-latest
     needs: docker
+    strategy:
+      matrix:
+        defines:
+          - ""
+          - "DESKTOP_APP_DISABLE_X11_INTEGRATION"
 
     env:
       UPLOAD_ARTIFACT: "true"
@@ -65,10 +79,33 @@ jobs:
       - name: Free up some disk space.
         uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
         
-      - name: Docker image build.
+      - name: Telegram Desktop build.
         run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          cd Telegram/build/docker/centos_env
-          rm poetry.lock
-          poetry install
-          DEBUG= LTO= poetry run gen_dockerfile | DOCKER_BUILDKIT=1 docker build -t tdesktop:centos_env -
+          docker pull ghcr.io/real-lihua/64gram_js0n/centos_env
+          docker tag ghcr.io/real-lihua/64gram_js0n/centos_env tdesktop:centos_env
+          cd $REPO_NAME
+
+          DEFINE=""
+          if [ -n "${{ matrix.defines }}" ]; then
+            DEFINE="-D ${{ matrix.defines }}=ON"
+            echo Define from matrix: $DEFINE
+            echo "ARTIFACT_NAME=Telegram_${{ matrix.defines }}" >> $GITHUB_ENV
+          else
+            echo "ARTIFACT_NAME=Telegram" >> $GITHUB_ENV
+          fi
+          
+
+          docker run --rm -it \
+          -u $(id -u) \
+          -v "$PWD:/usr/src/tdesktop" \
+          tdesktop:centos_env \
+          /usr/src/tdesktop/Telegram/build/docker/centos_env/build.sh \
+          -D TDESKTOP_API_ID=${{ inputs.YOUR_API_ID }} \
+          -D TDESKTOP_API_HASH=${{ inputs.YOUR_API_HASH }}
+
+      - uses: actions/upload-artifact@v4
+        if: env.UPLOAD_ARTIFACT == 'true'
+        name: Upload artifact.
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: ${{ env.REPO_NAME }}/out/Release
