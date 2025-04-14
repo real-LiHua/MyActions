@@ -81,6 +81,7 @@ jobs:
         with:
           repository: JasonKhew96/64gram
           submodules: recursive
+          path: ${{ env.REPO_NAME }}
         
       - name: Free up some disk space.
         uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
