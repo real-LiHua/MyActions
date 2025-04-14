@@ -73,6 +73,9 @@ jobs:
       UPLOAD_ARTIFACT: "true"
 
     steps:
+      - name: Get repository name.
+        run: echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_ENV
+        
       - name: Clone.
         uses: actions/checkout@v4
         with:
