@@ -17,8 +17,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - run: gh cache delete telegram_count
       
       - uses: actions/cache/restore@v4
         id: cache
