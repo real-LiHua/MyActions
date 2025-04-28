@@ -31,7 +31,7 @@ jobs:
             id="$(curl "$BOTAPI/sendMessage?chat_id=${{ secrets.CHAT_ID }}&text=正在进行消息计数" | jq .result.message_id)"
             if [ -f last_id ]; then
                 last_id="$(cat last_id)"
-            elif [ -f last_id ]; then
+            elif [ ! -z "${{ secrets.LAST_ID }}" ]; then
                 last_id="${{ secrets.LAST_ID }}"
             else
                 last_id=$id
