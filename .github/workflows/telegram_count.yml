@@ -32,9 +32,9 @@ jobs:
             if [ -f last_id ]; then
                 last_id="$(cat last_id)"
             else
-                last_id=${{ secrets.START_ID }}
+                last_id="${{ secrets.LAST_ID }}"
             fi
-            curl -o /dev/null "$BOTAPI/editMessageText?chat_id=${{ secrets.CHAT_ID }}&message_id=$id&text=$(( id - last_id  ))"
+            curl -o /dev/null "$BOTAPI/editMessageText?chat_id=${{ secrets.CHAT_ID }}&message_id=$id&text=$(( id - last_id ))"
             echo -n $id > last_id
           fi
           
