@@ -15,31 +15,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - uses: actions/cache/restore@v4
-        with:
-          key: telegram_count
-          path: last_id
-
       - run: |
           if [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
             id="$(curl "$BOTAPI/sendMessage?chat_id=$CHAT_ID&text=消息计数中" | jq .result.message_id)"
-            if [ -f last_id ]; then
-                last_id="$(cat last_id)"
-            elif [ ! -z "${{ secrets.LAST_ID }}" ]; then
+            if [ ! -z "${{ secrets.LAST_ID }}" ]; then
                 last_id="${{ secrets.LAST_ID }}"
             else
                 last_id=$id
             fi
             curl -o /dev/null "$BOTAPI/editMessageText?chat_id=$CHAT_ID&message_id=$id&text=$(( id - last_id ))"
-            gh cache delete telegram_count || true
-            echo -n $id > last_id
+            gh secret set LAST_ID --body "$id"
           fi
         env:
           GH_TOKEN: ${{ github.token }}
           BOTAPI: "https://api.telegram.org/bot${{ secrets.BOT_TOKEN }}"
           CHAT_ID: ${{ secrets.CHAT_ID }}
-          
-      - uses: actions/cache/save@v4
-        with:
-          key: telegram_count
-          path: last_id
