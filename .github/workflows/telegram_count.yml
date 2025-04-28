@@ -8,7 +8,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
       - uses: actions/cache@v4
         with:
           path: last_id
@@ -17,7 +16,7 @@ jobs:
       - run: |
           if [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
             BOTAPI="https://api.telegram.org/bot${{ secrets.BOT_TOKEN }}"
-            id="$(curl "$BOTAPI/sendMessage?chat_id=-1002025381790&text=测试" | jq .result.message_id)"
+            id="$(curl "$BOTAPI/sendMessage?chat_id=-1002025381790&text=正在进行消息计数" | jq .result.message_id)"
             if [ -f last_id ]; then
               last_id="$(cat last_id)"
               curl "$BOTAPI/editMessageText?chat_id=-1002025381790&message_id=$id&text=$(( id - last_id  ))"
