@@ -16,6 +16,6 @@ jobs:
 
       - run: |
           if [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
-            BotApi="https://api.telegram.org/bot${BOT_TOKEN}"
+            BotApi="https://api.telegram.org/bot${{ secrets.BOT_TOKEN }}"
             curl "$BotApi/getMe" | jq
           fi
