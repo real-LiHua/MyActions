@@ -22,7 +22,7 @@ jobs:
 
       - run: |
           if [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
-            id="$(curl "$BOTAPI/sendMessage?chat_id=$CHAT_ID&text=正在进行消息计数" | jq .result.message_id)"
+            id="$(curl "$BOTAPI/sendMessage?chat_id=$CHAT_ID&text=消息计数中" | jq .result.message_id)"
             if [ -f last_id ]; then
                 last_id="$(cat last_id)"
             elif [ ! -z "${{ secrets.LAST_ID }}" ]; then
