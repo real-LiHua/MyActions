@@ -8,10 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
-    permissions:
-      contents: write
-      
+
     steps:
       - uses: actions/checkout@v4
       
@@ -27,6 +24,6 @@ jobs:
             gh secret set LAST_ID --body "$id"
           fi
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
           BOTAPI: "https://api.telegram.org/bot${{ secrets.BOT_TOKEN }}"
           CHAT_ID: ${{ secrets.CHAT_ID }}
