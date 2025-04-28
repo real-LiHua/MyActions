@@ -9,9 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
-      
+    steps:     
       - run: |
           if [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
             id="$(curl "$BOTAPI/sendMessage?chat_id=$CHAT_ID&text=消息计数中" | jq .result.message_id)"
@@ -21,7 +19,7 @@ jobs:
                 last_id=$id
             fi
             curl -o /dev/null "$BOTAPI/editMessageText?chat_id=$CHAT_ID&message_id=$id&text=$(( id - last_id ))"
-            gh secret set LAST_ID --body "$id"
+            gh secret set LAST_ID --repo "${{ github.repository }}" --body "$id"
           fi
         env:
           # Fine-grained personal access token 需要权限： secrets 可写（为了安全考虑、建议仅作用于一个仓库
