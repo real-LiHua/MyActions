@@ -17,6 +17,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - run: gh cache delete telegram_count
       
       - uses: actions/cache/restore@v4
         id: cache
@@ -32,7 +34,7 @@ jobs:
             if [ -f last_id ]; then
                 last_id="$(cat last_id)"
             else
-                 last_id=${{ secrets.START_ID }}
+                last_id=${{ secrets.START_ID }}
             fi
             curl -o /dev/null "$BOTAPI/editMessageText?chat_id=${{ secrets.CHAT_ID }}&message_id=$id&text=$(( id - last_id  ))"
             echo -n $id > last_id
