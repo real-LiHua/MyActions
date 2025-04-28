@@ -12,9 +12,6 @@ jobs:
     permissions:
       actions: write
 
-    env:
-      GH_TOKEN: ${{ github.token }}
-
     steps:
       - uses: actions/checkout@v4
       
@@ -26,8 +23,7 @@ jobs:
 
       - run: |
           if [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
-            BOTAPI="https://api.telegram.org/bot${{ secrets.BOT_TOKEN }}"
-            id="$(curl "$BOTAPI/sendMessage?chat_id=${{ secrets.CHAT_ID }}&text=正在进行消息计数" | jq .result.message_id)"
+            id="$(curl "$BOTAPI/sendMessage?chat_id=$CHAT_ID&text=正在进行消息计数" | jq .result.message_id)"
             if [ -f last_id ]; then
                 last_id="$(cat last_id)"
             elif [ ! -z "${{ secrets.LAST_ID }}" ]; then
@@ -35,10 +31,14 @@ jobs:
             else
                 last_id=$id
             fi
-            curl -o /dev/null "$BOTAPI/editMessageText?chat_id=${{ secrets.CHAT_ID }}&message_id=$id&text=$(( id - last_id ))"
+            curl -o /dev/null "$BOTAPI/editMessageText?chat_id=$CHAT_ID&message_id=$id&text=$(( id - last_id ))"
             gh cache delete telegram_count || true
             echo -n $id > last_id
           fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BOTAPI: "https://api.telegram.org/bot${{ secrets.BOT_TOKEN }}"
+          CHAT_ID: ${{ secrets.CHAT_ID }}
           
       - uses: actions/cache/save@v4
         with:
