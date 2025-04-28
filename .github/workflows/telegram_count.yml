@@ -9,6 +9,7 @@ jobs:
     
     permissions:
       actions: write
+      contents: read
 
     steps:
       - uses: actions/cache/restore@v4
