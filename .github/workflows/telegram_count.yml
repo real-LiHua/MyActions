@@ -26,7 +26,7 @@ jobs:
           fi
           
       - uses: actions/cache/save@v4
-        if: always() && steps.cache.outputs.cache-hit != 'true'
+        if: always()
         with:
           key: ${{ steps.cache.outputs.cache-primary-key }}
           path: last_id
