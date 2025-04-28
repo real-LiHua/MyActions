@@ -14,6 +14,8 @@ jobs:
       GH_TOKEN: ${{ github.token }}
 
     steps:
+      - uses: actions/checkout@v4
+      
       - uses: actions/cache/restore@v4
         id: cache
         with:
