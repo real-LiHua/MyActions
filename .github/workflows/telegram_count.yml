@@ -6,6 +6,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    permissions:
+      actions: write
 
     steps:
       - uses: actions/cache/restore@v4
@@ -16,6 +19,7 @@ jobs:
 
       - run: |
           if [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
+            gh cache delete telegram_count || true
             BOTAPI="https://api.telegram.org/bot${{ secrets.BOT_TOKEN }}"
             id="$(curl "$BOTAPI/sendMessage?chat_id=-1002025381790&text=正在进行消息计数" | jq .result.message_id)"
             if [ -f last_id ]; then
@@ -26,7 +30,6 @@ jobs:
           fi
           
       - uses: actions/cache/save@v4
-        if: always()
         with:
           key: ${{ steps.cache.outputs.cache-primary-key }}
           path: last_id
