@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     
     permissions:
-      repo: write
+      secrets: write
 
     steps:
       - uses: actions/checkout@v4
