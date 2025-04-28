@@ -24,6 +24,7 @@ jobs:
             gh secret set LAST_ID --body "$id"
           fi
         env:
+          # Fine-grained personal access token 需要权限： secrets 可写（为了安全考虑、建议仅作用于一个仓库
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           BOTAPI: "https://api.telegram.org/bot${{ secrets.BOT_TOKEN }}"
           CHAT_ID: ${{ secrets.CHAT_ID }}
