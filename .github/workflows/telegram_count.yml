@@ -31,7 +31,7 @@ jobs:
             id="$(curl "$BOTAPI/sendMessage?chat_id=-1002025381790&text=正在进行消息计数" | jq .result.message_id)"
             if [ -f last_id ]; then
               last_id="$(cat last_id)"
-              curl "$BOTAPI/editMessageText?chat_id=-1002025381790&message_id=$id&text=$(( id - last_id  ))"
+              curl -o /dev/null "$BOTAPI/editMessageText?chat_id=-1002025381790&message_id=$id&text=$(( id - last_id  ))"
             fi
             echo -n $id > last_id
           fi
