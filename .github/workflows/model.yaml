@@ -9,6 +9,8 @@ jobs:
           python -m venv .
           . bin/activate
           pip install -U ultralytics
+          mkdir model
+          cd model
           echo "from ultralytics import YOLO, checks, hub" >> main.py
           echo "checks()" >> main.py
           echo "hub.login('${{ secrets.ULTRALYTICS_TOKEN }}')" >> main.py
