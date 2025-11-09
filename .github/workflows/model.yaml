@@ -1,0 +1,13 @@
+name: model
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+  steps:
+    - run: |
+        python -m venv .
+        . bin/activate
+        pip install -U ultralytics
+        echo "from ultralytics import YOLO, checks, hub\nchecks()\nhub.login('${{ secrets.ULTRALYTICS_TOKEN }}')\nmodel = YOLO('https://hub.ultralytics.com/models/${{ secrets.ULTRALYTICS_MODEL }}')\nresults = model.train()" >> main.py
+        python main.py
