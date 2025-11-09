@@ -4,14 +4,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-  steps:
-    - run: |
-        python -m venv .
-        . bin/activate
-        pip install -U ultralytics
-        echo "from ultralytics import YOLO, checks, hub" >> main.py
-        echo "checks()" >> main.py
-        echo "hub.login('${{ secrets.ULTRALYTICS_TOKEN }}')" >> main.py
-        echo "model = YOLO('https://hub.ultralytics.com/models/${{ secrets.ULTRALYTICS_MODEL }}')" >> main.py
-        echo "results = model.train()" >> main.py
-        python main.py
+    steps:
+      - run: |
+          python -m venv .
+          . bin/activate
+          pip install -U ultralytics
+          echo "from ultralytics import YOLO, checks, hub" >> main.py
+          echo "checks()" >> main.py
+          echo "hub.login('${{ secrets.ULTRALYTICS_TOKEN }}')" >> main.py
+          echo "model = YOLO('https://hub.ultralytics.com/models/${{ secrets.ULTRALYTICS_MODEL }}')" >> main.py
+          echo "results = model.train()" >> main.py
+          python main.py
