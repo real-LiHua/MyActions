@@ -9,5 +9,9 @@ jobs:
         python -m venv .
         . bin/activate
         pip install -U ultralytics
-        echo "from ultralytics import YOLO, checks, hub\nchecks()\nhub.login('${{ secrets.ULTRALYTICS_TOKEN }}')\nmodel = YOLO('https://hub.ultralytics.com/models/${{ secrets.ULTRALYTICS_MODEL }}')\nresults = model.train()" >> main.py
+        echo "from ultralytics import YOLO, checks, hub" >> main.py
+        echo "checks()" >> main.py
+        echo "hub.login('${{ secrets.ULTRALYTICS_TOKEN }}')" >> main.py
+        echo "model = YOLO('https://hub.ultralytics.com/models/${{ secrets.ULTRALYTICS_MODEL }}')" >> main.py
+        echo "results = model.train()" >> main.py
         python main.py
