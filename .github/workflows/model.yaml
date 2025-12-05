@@ -7,7 +7,7 @@ jobs:
     steps:
       - run: |
           sudo apt install -y aria2
-          aria2c -x 32 -s 32 $(curl -H 'Content-Type: application/json' -d '${{ secrets.PAYLOAD }}' '${{ secrets.API }}' | jq .download_url)
+          aria2c -x 16 -s 32 $(curl -H 'Content-Type: application/json' -d '${{ secrets.PAYLOAD }}' '${{ secrets.API }}' | jq .download_url)
           exit
           python -m venv .
           . bin/activate
